@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+
+<div class="jumbotron centered">
+    <div class="container">
+      <!-- <i class="fas fa-key fa-6x"></i> -->
+      <h1 class="display-3" style="font-size: 50px; font-weight:bold; margin: 50px">SYGE Payroll Software</h1>
+      <p class="lead">Empowering businesses with smart payroll solutions.</p>
+      <hr>
+      <div class="container mt-5">
+      <h1 style="color: rgb(235, 60, 60); font-weight: bold;">User not found</h1></h1>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="card">
+            <div class="card-body">
+    
+              <!-- Makes POST request to /login route -->
+              <form action="/" method="POST">
+                <div class="form-group">
+                  <label for="email" style="color: rgb(230, 63, 63);"> Email</label>
+                  <input type="email" class="form-control" name="username">
+                </div>
+                <div class="form-group">
+                  <label for="password" style="color: rgb(230, 63, 63);" >Password</label>
+                  <input type="password" class="form-control" name="password">
+                </div>
+                <button type="submit" class="btn btn-dark btn-lg">Login</button>
+              </form>
+    
+            </div>
+          </div>
+        </div>
+    
+        <!-- <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <a class="btn btn-block" href="/auth/google" role="button">
+                <i class="fab fa-google"></i>
+                Sign In with Google
+              </a>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+    </div> -->
+  
+    </div>
+  </div>
+
+
+
+
+<%- include('partials/footer') %>

@@ -1,0 +1,33 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+  <th>Profile Picture</th>
+  <th>Student Number</th>
+  <th>Fist Name</th>
+  <th>Last Name</th>
+  <th>Address</th>
+  <th>Gender</th>
+  <th>Grade Number</th>
+  <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% Learn.forEach(function(item) { %>
+  <tr>
+    <td> <img class="ProfileP" src="<%= item.Leaner_Profile_Picture %>" alt=""></td>
+    <td><%= item.Student_Number %></td>
+    <td><%= item.Fist_Name %></td>
+    <td><%= item.Last_Name %></td>
+    <td><%= item.address %></td>
+    <td><%= item.Gender %></td>
+    
+    <td><%= item.grade_number %></td>
+    <td>
+      <i class="fas fa-edit edit-icon"></i>
+      <i class="fas fa-trash-alt edit-icon2"></i>
+    </td>
+  </tr>
+  <% }); %>
+  </tbody>
+  
+  </table>

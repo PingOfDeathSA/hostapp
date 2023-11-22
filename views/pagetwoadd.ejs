@@ -1,0 +1,45 @@
+<div style="height: 100px;"></div>
+
+
+  
+<form  action="/upload" method="post" enctype="multipart/form-data" style="margin-left: 50px;">
+    <div class="form-group">
+      <label for="exampleFormControlFile1">Example file input</label>
+      <input type="file"  name="image" class="form-control-file" id="exampleFormControlFile1" onchange="displayImage(event)">
+    </div>
+    <div class="image-preview" id="imagePreview">
+      <img src="" alt="Image Preview" id="previewImage" style="max-width: 100%; max-height: 100px;">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  
+  <script>
+    function displayImage(event) {
+  const selectedFile = event.target.files[0];
+  const previewImage = document.getElementById('previewImage');
+  const imagePreview = document.getElementById('imagePreview');
+
+  if (selectedFile) {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+      previewImage.src = event.target.result;
+    };
+
+    reader.readAsDataURL(selectedFile);
+    imagePreview.style.display = 'block'; // Show the image preview container
+  } else {
+    previewImage.src = '';
+    imagePreview.style.display = 'none'; // Hide the image preview container if no file is selected
+  }
+}
+
+  </script>
+
+  <style>
+    .image-preview {
+  display: none;
+  margin-top: 10px;
+}
+
+  </style>

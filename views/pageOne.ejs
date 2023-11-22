@@ -1,0 +1,189 @@
+
+
+
+<div class="topsapce"></div>
+
+<ul class="post-list">
+    <% for (var i = 0; i < Posted.length; i++) { %>
+   <!-- Your existing HTML structure -->
+<li class="post-item">
+<div class="post-container">  
+
+<% function getTimeAgo(postedDate) {
+const currentDate = new Date();
+const postDate = new Date(postedDate);
+const timeDifference = currentDate - postDate;
+const seconds = Math.floor(timeDifference / 1000);
+const minutes = Math.floor(seconds / 60);
+const hours = Math.floor(minutes / 60);
+const days = Math.floor(hours / 24);
+const months = Math.floor(days / 30);
+const years = Math.floor(months / 12);
+
+if (years > 0) {
+return years === 1 ? "1y" : `${years}y`;
+} else if (months > 0) {
+return months === 1 ? "1mon" : `${months}mon`;
+} else if (days > 0) {
+return days === 1 ? "1 d" : `${days}d`;
+} else if (hours > 0) {
+return hours === 1 ? "1h" : `${hours}h`;
+} else if (minutes > 0) {
+return minutes === 1 ? "1min" : `${minutes}min`;
+} else {
+return "Just now";
+}
+} %>
+
+<!-- Then use it within your template -->
+<div class="posted-by">
+<%= Posted[i].PostedBy %> <span class="posted-time" ><%= getTimeAgo(Posted[i].Date) %> <span><i class="fa fa-globe" style="font-size:14px;color:F4BF96"></i>
+</span></span>
+</div>
+
+<span><img class="posterimage" src="<%= Posted[i].profliepic %>" alt="profile image"></span>
+<% if (Array.isArray(Posted) && Posted[i] && Posted[i].PostedImage) { %>
+  <% if (Posted[i].PostedImage.includes('youtube')) { %>
+      <iframe width="560" height="315" class="posterimage2" src="<%= Posted[i].PostedImage %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <% } else if (Posted[i].PostedImage.trim() !== '') { %>
+      <img class="posterimage2" src="<%= Posted[i].PostedImage %>" alt="profile image">
+  <% } else { %>
+      <div class="empty-div"></div>
+  <% } %>
+<% } else { %>
+  <div class="empty-div"></div>
+<% } %>
+
+<span class="post-message"><%= Posted[i].Message %></span>
+<div class="iconsContainer">
+<!-- Replace 'countlikes' with the appropriate class name -->
+<span style="font-size: 12px; font-weight: 500; margin-left: 10px" class="countlikes" onclick="showLikedUsers('<%= JSON.stringify(Likeed) %>', '<%= Posted[i]._id %>')" data-toggle="modal" data-target="#likeModal">
+  <% var LikeedCount2 = 0; %>
+  <% for (var j = 0; j < Likeed.length; j++) { %>
+    <% if (Likeed[j].Postid.toString() === Posted[i]._id.toString()) { %>
+      <% LikeedCount2++; %>
+    <% } %>
+  <% } %>
+  <%= LikeedCount2 > 0 ? LikeedCount2 : '0' %>
+</span>
+
+
+
+
+
+
+<span class="inline-span">
+  <!-- Move the form inside the loop -->
+  <form action="/Like" method="post" class="inline-span">
+    <input type="hidden" name="postId" value="<%= Posted[i]._id %>">
+    <input type="hidden" name="like" value="true">
+
+    <button type="submit" class="btn-sm inline-button" style="margin: 0%;padding: 0%;margin-right: 110px;">
+      <span class="likebutton">
+        <% var LikeedCount = 0; %>
+        <% for (var j = 0; j < Likeed.length; j++) { %>
+          <% if (Likeed[j].Likeby.toString() === 'No man' && Likeed[j].Postid.toString() === Posted[i]._id.toString()) { %>
+            <% LikeedCount++; %>
+          <% } %>
+          
+        <% } %>
+        <i class="fa fa-heart" style="color: <%= LikeedCount > 0 ? 'red' : 'gray' %>;"></i>
+
+ 
+       
+        
+      </span>  
+    </button>
+  </form>
+</span>
+
+
+
+
+<% var commentCount = 0; %>
+<% for (var j = 0; j < commented.length; j++) { %>
+<% if (commented[j].Postid.toString() === Posted[i]._id.toString()) { %>
+<% commentCount++; %>
+<% } %>
+<% } %>
+
+<span class="icon2" onclick="toggleComments(this)"><i class="fa fa-comment" style="color: 9BBEC8;"></i><span  style="font-size: 12px;font-weight: 600;" >
+<%= commentCount > 0 ? commentCount : '' %>
+</span>
+</span>
+<span class="icon3"><i class="fa fa-star" style="color:rgb(162, 197, 121);"></i></span>
+
+
+
+</div>
+</div>
+<div class="comments">
+
+  <form action="/comments" method="post">
+    <input type="hidden" name="postId" value="<%= Posted[i]._id %>"> 
+      <div class="form-group row">
+        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Comment</label>
+        <div class="col-sm-10">
+          <input type="text" name="comment" class="form-control form-control-sm" id="colFormLabelSm" placeholder="" st>
+        </div>
+      </div>
+      <button type="submit" class="btn-sm">reply</button>
+    </form>
+
+<% for (var j = 0; j < commented.length; j++) { %>
+<% if (commented[j].Postid.toString() === Posted[i]._id.toString()) { %>
+  <div class="linetop"></div>
+<span class="namecommenter"><%= commented[j].CommentedBy %></span>
+<div class="comment-item">
+
+<div class="comment-content">
+  <img class="imagecommeter" src="<%= commented[j].profilelike %>" alt="profile image">
+  <span class="comment-message"><%= commented[j].Message %></span>
+</div>
+
+</div>
+<div class="linetop"></div>
+<% } %>
+<% } %>
+</div>
+</li>
+
+      </li>
+      <div class="emptyspace"></div>
+    <% } %>
+  </ul>
+
+  <style>
+.countlikes{
+  margin: 0px;
+  padding: 0px;
+}
+
+  .inline-span {
+    display: inline; /* or inline-block */
+  }
+  .inline-button {
+    display: inline; /* or inline-block */
+  }
+    .topsapce{
+      height: 70px;
+    }
+    .posted-time{
+        font-weight: 400;
+        font-size: 13px;
+        color: black;
+    }
+    .posterimage2{
+      margin-top: 10px;
+width: 300px;
+height: 150px;
+object-fit: cover;
+    }
+    .linetop{
+      border-top-width:1px ;
+      border-bottom-width:0px ;
+      border-left-width:0px ;
+      border-right-width:0px ;
+      border-color: rgb(228, 228, 228);
+    }
+  </style>

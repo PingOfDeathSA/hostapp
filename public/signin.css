@@ -1,0 +1,492 @@
+html,
+body {
+  height: 100%;
+ 
+}
+
+body {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-align: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+  /* background-image: url("https://cdn-icons-png.flaticon.com/512/874/874728.png"); */
+  /* background-image: linear-gradient(45deg, #cac9c9 60%, #f5f5f5 44%) ; */
+  background-size: 20%;
+  background-position: center center;
+    /* background-size: cover; */
+    background-repeat: no-repeat;
+    position: relative;
+    right: 0px;
+    bottom: 130px;
+    background-attachment: scroll;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+.h3{
+  
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  padding-bottom: 10%;
+
+}
+.top{
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.middle {
+  margin-bottom: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.bottom {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+h5{
+  font-weight: bold;
+  font-size: 10%;
+ 
+  
+}
+/* sideMenu */
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+.b-example-divider {
+  height: 3rem;
+  background-color: rgba(0, 0, 0, .1);
+  border: solid rgba(0, 0, 0, .15);
+  border-width: 1px 0;
+  box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+}
+
+.b-example-vr {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 100vh;
+}
+
+.bi {
+  vertical-align: -.125em;
+  fill: currentColor;
+}
+
+.nav-scroller {
+  position: relative;
+  z-index: 2;
+  height: 2.75rem;
+  overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+  display: flex;
+  flex-wrap: nowrap;
+  padding-bottom: 1rem;
+  margin-top: -1px;
+  overflow-x: auto;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+body {
+  background-color:#EDEDED ;
+  font-size: .875rem;
+}
+.h52 {
+  color: rgb(0, 0, 0);
+  /* font-weight: bold; */
+}
+
+/* .sideM{
+  background-color: #BBE1FA;
+} */
+
+.firstContainer{
+  background-color: #BBE1FA;
+}
+
+.SecondContainer{
+  background-color: #0F4C75;
+}
+.thridContainer{
+  background-color: #3282B8;
+}
+.feather {
+  width: 16px;
+  height: 16px;
+}
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  /* rtl:raw:
+  right: 0;
+  */
+  bottom: 0;
+  /* rtl:remove */
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    top: 5rem;
+  }
+}
+
+.sidebar-sticky {
+  height: calc(100vh - 48px);
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #727272;
+}
+
+.sidebar .nav-link.active {
+  color: #2470dc;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  background-color: rgba(0, 0, 0, .25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.navbar .navbar-toggler {
+  top: .25rem;
+  right: 1rem;
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+}
+
+.form-control-dark {
+  color: #fff;
+  background-color: rgba(255, 255, 255, .1);
+  border-color: rgba(255, 255, 255, .1);
+}
+
+.form-control-dark:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+
+.ProfileTecher{
+margin-top: 1%;
+margin-left: 2%;
+
+
+}
+.image_size {
+  margin: 2%;
+ 
+  width: 100%;
+   border-radius: 5%;
+  border: solid black 2px;
+  overflow: hidden;
+}
+.paddingCards{
+  margin: 0%;
+}
+
+.list-group{
+  margin:2%;
+}
+
+.edit-icon {
+  margin: 2%;
+  color: rgb(12, 172, 12);
+}
+.edit-icon2 {
+  color: red;
+}
+.container1{
+  margin: 0%;
+  padding: 0%;
+}
+
+.searchclick{
+  margin: 0%;
+  padding: 0%;
+  position: relative;
+  left: 11%;
+}
+
+@media screen and (max-width: 992px) {
+  .searchclick {
+    margin: 0%;
+    padding: 0%;
+    position: relative;
+    left: 3%;
+  }
+}
+.notificationd{
+  background-color: #BBE1FA;
+
+
+}
+.card-header {
+  background-color: #BBE1FA;
+}
+
+/* Time table style */
+
+body{margin-top:20px;}
+.schedule-table table thead tr {
+background: #3282B8;
+}
+.schedule-table table thead th {
+padding: 25px 50px;
+color: #fff;
+text-align: center;
+font-size: 20px;
+font-weight: 800;
+position: relative;
+border: 0;
+}
+.schedule-table table thead th:before {
+content: "";
+width: 3px;
+height: 35px;
+background: rgba(255, 255, 255, 0.2);
+position: absolute;
+right: -1px;
+top: 50%;
+transform: translateY(-50%);
+}
+.schedule-table table thead th.last:before {
+content: none;
+}
+.schedule-table table tbody td {
+vertical-align: middle;
+border: 1px solid #e2edf8;
+font-weight: 500;
+padding: 30px;
+text-align: center;
+}
+.schedule-table table tbody td.day {
+font-size: 22px;
+font-weight: 600;
+background: #f0f1f3;
+border: 1px solid #e4e4e4;
+position: relative;
+transition: all 0.3s linear 0s;
+min-width: 165px;
+}
+.schedule-table table tbody td.active {
+position: relative;
+z-index: 10;
+transition: all 0.3s linear 0s;
+min-width: 165px;
+}
+.schedule-table table tbody td.active h4 {
+font-weight: 700;
+color: #000;
+font-size: 20px;
+margin-bottom: 5px;
+}
+.schedule-table table tbody td.active p {
+font-size: 16px;
+line-height: normal;
+margin-bottom: 0;
+}
+.schedule-table table tbody td .hover h4 {
+font-weight: 700;
+font-size: 20px;
+color: #ffffff;
+margin-bottom: 5px;
+}
+.schedule-table table tbody td .hover p {
+font-size: 16px;
+margin-bottom: 5px;
+color: #ffffff;
+line-height: normal;
+}
+.schedule-table table tbody td .hover span {
+color: #ffffff;
+font-weight: 600;
+font-size: 18px;
+}
+.schedule-table table tbody td.active::before {
+position: absolute;
+content: "";
+min-width: 100%;
+min-height: 100%;
+transform: scale(0);
+top: 0;
+left: 0;
+z-index: -1;
+border-radius: 0.25rem;
+transition: all 0.3s linear 0s;
+}
+.schedule-table table tbody td .hover {
+position: absolute;
+left: 50%;
+top: 50%;
+width: 120%;
+height: 120%;
+transform: translate(-50%, -50%) scale(0.8);
+z-index: 99;
+background: #3282B8;
+border-radius: 0.25rem;
+padding: 25px 0;
+visibility: hidden;
+opacity: 0;
+transition: all 0.3s linear 0s;
+}
+.schedule-table table tbody td.active:hover .hover {
+transform: translate(-50%, -50%) scale(1);
+visibility: visible;
+opacity: 1;
+}
+.schedule-table table tbody td.day:hover {
+background: #0F4C75;
+color: #fff;
+border: 1px solid #1B262C;
+}
+@media screen and (max-width: 1199px) {
+.schedule-table {
+display: block;
+width: 100%;
+overflow-x: auto;
+}
+.schedule-table table thead th {
+padding: 25px 40px;
+}
+.schedule-table table tbody td {
+padding: 20px;
+}
+.schedule-table table tbody td.active h4 {
+font-size: 18px;
+}
+.schedule-table table tbody td.active p {
+font-size: 15px;
+}
+.schedule-table table tbody td.day {
+font-size: 20px;
+}
+.schedule-table table tbody td .hover {
+padding: 15px 0;
+}
+.schedule-table table tbody td .hover span {
+font-size: 17px;
+}
+}
+@media screen and (max-width: 991px) {
+.schedule-table table thead th {
+font-size: 18px;
+padding: 20px;
+}
+.schedule-table table tbody td.day {
+font-size: 18px;
+}
+.schedule-table table tbody td.active h4 {
+font-size: 17px;
+}
+}
+@media screen and (max-width: 767px) {
+.schedule-table table thead th {
+padding: 15px;
+}
+.schedule-table table tbody td {
+padding: 15px;
+}
+.schedule-table table tbody td.active h4 {
+font-size: 16px;
+}
+.schedule-table table tbody td.active p {
+font-size: 14px;
+}
+.schedule-table table tbody td .hover {
+padding: 10px 0;
+}
+.schedule-table table tbody td.day {
+font-size: 18px;
+}
+.schedule-table table tbody td .hover span {
+font-size: 15px;
+}
+}
+@media screen and (max-width: 575px) {
+.schedule-table table tbody td.day {
+min-width: 135px;
+}
+}
+/* Time table style */
+.container .row .profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #2470dc;
+}

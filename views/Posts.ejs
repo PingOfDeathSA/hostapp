@@ -1,0 +1,414 @@
+
+<section aria-colspan="main">
+  <!doctype html>
+  <html lang="en">
+    <%- include("header") -%>
+<style>
+  body{
+    font-family: Verdana,;
+    background-color: #ccc;
+  }
+  .navbar{
+ position: fixed;
+ z-index: 1;
+ width: 100%;
+ padding-top: 20px;
+ padding-right: 25px;
+ padding-left: 20px;
+  }
+</style>
+<!-- In your EJS template file -->
+
+
+
+
+    <body> 
+      <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <h5 class="sidebar-item" data-number="1">  <i class="fa fa-pencil"></i> Blogs 
+          <h5 class="sidebar-item" data-number="2"><i class="fa fa-user"></i> Profile</h5>
+          <h5 class="sidebar-item" data-number="3"><i class="fa fa-heart"></i> Favorite</h5>
+          <h5 class="sidebar-item" data-number="4"><i class="fa fa-gear"></i> Settings</h5>
+      </nav>
+
+      <div class="row">
+        <div class="col-0">
+          <%- include("sidemenu") -%>
+        </div>
+        <div class="col-12">
+          <!-- Content to display based on the selected number -->
+          <div class="content" id="content-1">
+
+            <%- include("pageOne.ejs") -%>
+          </div>
+          
+          <div class="content" id="content-2" style="display: none;">
+            <%- include("pagetwoadd.ejs") -%>
+
+
+          </div>
+          <div class="content" id="content-3" style="display: none;">
+            <ul>
+              <% for (var i = 0; i < Posted.length; i++) { %>
+                <li class="test"><%= Posted[i].PostedBy %> 3 <%= Posted[i].Message %></li>
+              <% } %>
+            </ul>
+          </div>
+          <div class="content" id="content-4" style="display: none;">
+            <ul>
+              <% for (var i = 0; i < Posted.length; i++) { %>
+                <li><%= Posted[i].PostedBy %> 4 <%= Posted[i].Message %></li>
+              <% } %>
+            </ul>
+          </div>
+          <div class="content" id="content-5" style="display: none;">
+            <ul>
+              <% for (var i = 0; i < Posted.length; i++) { %>
+                <li><%= Posted[i].PostedBy %> 5 <%= Posted[i].Message %></li>
+              <% } %>
+            </ul>
+          </div>
+          <!-- Add more content divs for other numbers similarly -->
+        </div>
+      </div>
+      
+
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+  const sidebarItems = document.querySelectorAll(".sidebar-item");
+  const contentSections = document.querySelectorAll(".content");
+
+  sidebarItems.forEach(item => {
+    item.addEventListener("click", function() {
+      const number = this.getAttribute("data-number");
+      
+      // Hide all content sections
+      contentSections.forEach(section => {
+        section.style.display = "none";
+      });
+      
+      // Show the selected content based on number
+      const selectedContent = document.getElementById(`content-${number}`);
+      if (selectedContent) {
+        selectedContent.style.display = "block";
+      }
+    });
+  });
+});
+document.addEventListener("DOMContentLoaded", function() {
+  const sidebarItems = document.querySelectorAll(".sidebar-item");
+
+  sidebarItems.forEach(item => {
+    item.addEventListener("click", function() {
+      // Remove 'selected' class from all items
+      sidebarItems.forEach(sidebarItem => {
+        sidebarItem.classList.remove('selected');
+      });
+
+      // Add 'selected' class to the clicked item
+      this.classList.add('selected');
+    });
+  });
+});
+
+            function toggleComments(icon) {
+  const commentsContainer = icon.parentElement.parentElement.nextElementSibling;
+  commentsContainer.classList.toggle('show-comments');
+}
+
+            function animateHeart(element) {
+  const icon = element.querySelector('i');
+  icon.style.animation = 'heartbeat .5s ease-in-out';
+  setTimeout(() => {
+    icon.style.animation = '';
+  }, 500); // Reset the animation after 0.5s
+}
+
+
+function animateThumbsUp(element) {
+  const icon = element.querySelector('i');
+  icon.style.animation = 'thumbsUpAnimation 0.5s ease-in-out';
+  setTimeout(() => {
+    icon.style.animation = '';
+  }, 100); // Reset the animation after 0.5s
+}
+
+          </script>
+
+<style>
+  .btn-sm{
+      margin-left: 5px;
+      color: #9BBEC8;
+      font-weight: bold;
+   
+  }
+  .form-control{
+      margin: 0px;
+      color: black;
+      background-color: rgb(223, 222, 222);
+  }
+  .form-group{
+      margin: 0px;
+      margin-bottom: 5px;
+  }
+</style>
+          <style>
+            .post-message{
+              font-size: 14px; 
+              font-weight:600;
+              
+              letter-spacing: 0px;
+            }
+            .posterimage{
+              border-radius: 10px;
+              height: 50px;
+              width: 45px;
+            
+              border-width: 1px;
+              object-fit: cover;
+            }
+.namecommenter{
+  font-size: 14px;
+  font-weight: 600;
+  display: block;
+}
+.comments{
+  background-color: rgb(255, 255, 255);
+  margin-right: 17px;
+  margin-left: 40px;
+  padding: 3px;
+  border-radius: 10px;
+  margin-top: 5px;
+
+}
+.test{
+  color:#7e0000;
+}
+.comment-item {
+  display: flex;
+  align-items: center;
+  /* Add other styles as needed */
+}
+
+.comment-content {
+  text-align:start;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  margin-left: 0px; /* Adjust as needed */
+}
+
+
+
+.comment-message {
+ letter-spacing: 0.6px;
+ font-weight: 400;
+font-size: 12px;
+  margin-left: 1px; /* Adjust as needed */
+  
+}
+
+            .imagecommeter{
+              object-fit: cover;
+              margin: 2px;
+              border-radius: 10px;
+              height: 30px;
+              width: 35px;
+            }
+            .comments {
+  display: none; /* Hide comments by default */
+}
+
+.comments.show-comments {
+  display: block; /* Show comments when the 'show-comments' class is applied */
+}
+
+            /* Initial styles for the thumbs-up icon */
+.icon1 i {
+  color: rgb(206, 90, 103);
+  margin-top: 5px;/* Makes the border circular */
+  transition: color 0.3s; 
+}
+
+/* Change color to blue on hover */
+.icon1 i:hover {
+  color: white;
+}
+/* Fade-in animation for comments */
+.comments-container {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.comments-container.show-comments {
+  display: block;
+  opacity: 1;
+}
+
+/* Jelly animation for heart icon */
+@keyframes jelly {
+  from {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.25);
+  }
+  50% {
+    transform: scale(0.75);
+  }
+  75% {
+    transform: scale(1.15);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.icon2 i {
+  animation: jelly 0.5s ease-in-out;
+}
+
+/* Reset the animation after 0.5s */
+.icon2 i.animation-reset {
+  animation: none;
+}
+
+/* Animation keyframes for thumbs-up animation */
+@keyframes thumbsUpAnimation {
+  0% {
+    transform: scale(1) translateY();
+  }
+  50% {
+    transform: scale(1.5) translateY(-20px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+.iconsContainer{
+  margin-top: 20px;
+ 
+  border: solid;
+  border-top-width: 1px;
+  border-top-color: rgb(202, 202, 202);
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+
+}
+
+/* .emptyspace{
+  height: 5px;
+  
+  background-color: rgb(190, 190, 190);
+}      */
+.icon2 i,
+.icon3 i {
+  color: gray;
+ margin-top: 5px;
+  border-radius: 10px; /* Makes the border circular */
+}
+.icon1 i:hover {
+  color: wheat;
+
+}
+.icon3 i:hover {
+  color: grey;
+
+}
+    
+            .icon1{
+              margin-right: 110px;
+             
+              background-color: #f0f0f0;
+            }
+            .fa-thumbs-up{
+              background-color: white !important;
+            }
+            .icon2{
+              margin-right: 110px;
+            }
+            .icon3{
+              margin-right: 0px;
+            }
+            .post-list {
+  list-style: none;
+
+  padding: 0;
+}
+.commentscount{
+  margin-top: 15px;background-color:aquamarine;
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.post-item {
+ 
+  border-radius: 5px;
+ 
+  margin-bottom: 10px;
+}
+.post-container {
+  box-shadow: inset 0 0 150px 0 #ebebeb;
+ 
+  background-color: white;
+  margin-top: 10px;
+  margin-right: 0px;
+  margin-left: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.posted-by {
+ 
+  color: #7e7b7b;
+  font-weight: bold;
+}
+
+.post-number {
+  background-color: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+
+
+ 
+
+          </style>
+          
+
+
+
+
+
+
+ 
+        
+ 
+     
+
+        
+        <!-- Modal dialog -->
+        <script src="/js/script.js"></script>
+         </body>
+      
+      
+
+
+<!-- Main content -->
+
+
+
+
+  
+
+ <!-- this below is for connectinf the pages -->
+ 
+
+
+
+</html>

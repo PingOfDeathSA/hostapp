@@ -1,0 +1,335 @@
+<%- include("header") -%>
+
+  <head>
+    <link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#712cf9">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+
+  </head>
+  <!-- <div class="box" id="heading"><h1> <%= listTitle %> </h1></div> -->
+
+  <section aria-colspan="main">
+
+
+    <!doctype html>
+    <html lang="en">
+
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="">
+      <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+      <meta name="generator" content="Hugo 0.104.2">
+      <title>SYGE</title>
+
+      <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/dashboard/">
+      <link rel="stylesheet" href="style.css">
+
+      <link rel="stylesheet" href="public/css/style.css">
+
+
+
+
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+      <!-- Favicons -->
+
+
+
+      <!-- Custom styles for this template -->
+      <link href="style.css" rel="stylesheet">
+    </head>
+
+    <body>
+
+     
+
+      <div class="container-fluid">
+        <div class="row">
+          <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+              
+              <ul class="navbar-nav mr-auto mt-2 mt-sm-0">
+           
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">TUT Market Place</a>
+                  </li>
+                 
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Study Materials | </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Electronics |</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Furniture |</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Clothing and Accessories |</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Services |</a>
+                  </li>
+                  <li class="nav-item ">
+                    <a class="nav-link" aria-current="page" href="/MyItems.html" style="color: aliceblue;">
+                      <span data-feather="home" class="align-text-bottom" ></span>
+                      My Items |
+                    </a>
+                  </li>  <li class="nav-item">
+                    <a class="nav-link" href="/Inbox.html" style="color: aliceblue;">Inbox |</a>
+                  </li>
+           
+              
+              </ul>
+          
+              <form class="form-inline my-2 my-lg-0" style="padding-right: 3%;" action="/search" method="post">
+                <div class="input-group">
+                  <label for="search-input" class="sr-only"  >Search</label>
+                  <input type="text" id="search-input" class="form-control" name="searchQueryName" placeholder="Search" autocomplete="on" style="display: none;" required>
+                  <div class="input-group-append">
+                    <button class="btn btn-dark" type="submit" aria-label="Search">
+                      <i class="fas fa-search" style="display: none;"></i>
+                    </button>
+                    <a class="nav-link px-3" href="/" style="color: aliceblue;">Sign out</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </nav>
+      
+         
+
+
+            <div
+              class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+              <h1 class="h2">Administration</h1>
+
+              </button>
+              
+            </div>
+
+            <div class="row">
+              <div class="EmployeesHeader col-8">Add new Item</div>
+              <div class="col-4">
+
+
+
+              </div>
+            </div>
+
+
+            <section class="">
+
+
+
+
+              <form class="needs-validation" action="/AddnewItem" method="post" novalidate>
+                <div class="form-row">
+                  <div class="col-md-4 mb-3">
+                    <label for="validationCustom01" style="font-weight: bold;">Item Name</label>
+                    <input type="text" class="form-control" id="validationCustom01" name="ProductName"
+                      placeholder="Item Name" required style="background-color: lightgray;">
+                    <div class="invalid-feedback">
+                      Please Enter Item Name
+                    </div>
+                  </div>
+                </div>
+
+                
+                <div class="form-row">
+
+
+                  <div class="col-md-4 mb-3">
+                    <label for="validationCustomContactNumber" style="font-weight: bold;">Contact Number</label>
+                    <input type="number" class="form-control" id="validationCustomContactNumber" name="Contactnumber"
+                      placeholder="Contact number" pattern="^(\+27|0)[1-9]\d{8}$" required style="background-color: lightgray;">
+                    <div class="invalid-feedback">
+                      Please enter a valid South African contact number.
+                    </div>
+                  </div>
+
+                </div>
+                <div class="form-row">
+
+
+                  <div class="col-md-4 mb-3">
+                    <label for="validationCustomContactNumber" style="font-weight: bold;">Price</label>
+                    <input type="number" class="form-control" id="validationCustomContactNumber" name="Price"
+                      placeholder="Price" pattern="^(\+27|0)[1-9]\d{8}$" required style="background-color: lightgray;">
+                    <div class="invalid-feedback">
+                      Please enter Price.
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-md-2 mb-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="category1" value="Study Materials" checked >
+                    <label class="form-check-label" for="category1" style="font-weight: bold;">
+                      Study Materials
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="category2" value="Electronics" >
+                    <label class="form-check-label" for="category2" style="font-weight: bold;">
+                      Electronics
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="category3" value="Furniture" >
+                    <label class="form-check-label" for="category3" style="font-weight: bold;">
+                      Furniture
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="category4" value="Clothing and Accessories" >
+                    <label class="form-check-label" for="category4" style="font-weight: bold;">
+                      Clothing and Accessories
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="category5" value="Services" >
+                    <label class="form-check-label" for="category5" style="font-weight: bold;">
+                      Services
+                    </label>
+                  </div>
+                </div>
+                
+
+
+
+
+                <div class="form-row">
+                  <div class="col-md-3 mb-3 ">
+                    <label for="validationCustom01" style="font-weight: bold;">Image link1</label>
+                    <input  type="text" class="form-control" id="validationCustom01" name="Imagelink1"
+                      placeholder="Paste link" required style="background-color: lightgray;">
+                    <div class="invalid-feedback">
+                      Please Enter a valid Link
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="validationCustom01" style="font-weight: bold;">Image link 2</label>
+                    <input type="text" class="form-control" id="validationCustom01" name="Imagelink2"
+                      placeholder="Paste link" required style="background-color: lightgray;">
+                    <div class="invalid-feedback">
+                      Please Enter a valid Link
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="validationCustom01">Image link 3</label>
+                    <input type="text" class="form-control" id="validationCustom01" name="Imagelink3"
+                      placeholder="Paste link" required style="background-color: lightgray;">
+                    <div class="invalid-feedback">
+                      Please Enter a valid Link
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="validationCustom01" style="font-weight: bold;">Image link 4</label>
+                    <input type="text" class="form-control" id="validationCustom01" name="Imagelink4"
+                      placeholder="Paste link" required style="background-color: lightgray;">
+                    <div class="invalid-feedback">
+                      Please Enter a valid Link
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  
+                  <div class="col-md-6 mb-6">
+                    <label for="validationCustomTitle">Details</label>
+                    <input type="text" class="form-control" id="validationCustomTitle" placeholder="Item Infor" name="Details" required  style="height: 100px;background-color: lightgray;">
+                    <div class="invalid-feedback">
+                      Please enter Item Details.
+                    </div>
+                  </div>
+                  
+
+                </div>
+
+
+
+
+
+
+
+                <div class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+
+                    </label>
+                    <div class="invalid-feedback">
+                      You must Confirm before submitting.
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-primary" type="submit">Submit form</button>
+              </form>
+
+              <script>
+                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                (function () {
+                  'use strict';
+                  window.addEventListener('load', function () {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function (form) {
+                      form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                      }, false);
+                    });
+                  }, false);
+                })();
+              </script>
+
+
+
+            </section>
+
+            <!-- Modal dialog -->
+            <script src="/js/script.js"></script>
+    </body>
+
+
+
+
+    <!-- Main content -->
+
+
+
+
+
+
+    <!-- this below is for connectinf the pages -->
+
+
+
+
+    </html>
