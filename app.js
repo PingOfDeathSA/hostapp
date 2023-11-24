@@ -20,8 +20,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set('trust proxy', 1);
-const upload = multer({ dest: 'uploads/' }); // Destination folder for file uploads
-
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 app.use(session({
   secret: 'THeTerminatorIsHere',
@@ -92,7 +92,11 @@ const PostSchema = mongoose.Schema({
     type: Date,
     required: true,
     default: Date.now
-  }
+  },
+  name: String,
+  data: Buffer,
+  contentType: String,
+
 });
 
 const ComentSchema = mongoose.Schema({
@@ -133,6 +137,23 @@ const LikeSchema = mongoose.Schema({
   },
 });
 const imageSchema = new mongoose.Schema({
+  PostedBy: {
+    type: String || Number,
+  },
+  PostedImage: {
+    type: String || Number,
+  },
+  Message:  {
+    type: String || Number,
+  },
+  profliepic: {
+    type: String || Number,
+  },
+  Date: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
   name: String,
   data: Buffer,
   contentType: String,
@@ -142,7 +163,7 @@ const CommentModel = mongoose.model("Comment", ComentSchema);
 
 const LikesModel = mongoose.model("Likes", LikeSchema);
 
-
+const PostsModel = mongoose.model("Posts", PostSchema);
 
 const Imagemodel = mongoose.model('Image', imageSchema);
 
@@ -150,18 +171,23 @@ const Imagemodel = mongoose.model('Image', imageSchema);
 app.post('/upload', upload.single('image'), async (req, res) => {
   try {
     const { originalname, buffer, mimetype } = req.file;
+    const message = req.body.message; // Corrected to 'req.body.message'
 
-    // Create a new image document
-    const newImage = new Imagemodel({
+    console.log('message content:', message);
+
+    const newImage = new PostsModel({
       name: originalname,
       data: buffer,
       contentType: mimetype,
+      profliepic: 'https://images.pexels.com/photos/834863/pexels-photo-834863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      PostedBy: 'New Only',
+      Message: message,
+      Date: Date.now(),
     });
-
-    // Save the image to the database
+    
     await newImage.save();
 
-    res.status(201).send('Image uploaded successfully!');
+    res.redirect('/')
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred while uploading the image.');
@@ -169,8 +195,24 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 });
 
 
+app.get('/images', async (req, res) => {
+  try {
+    const images = await PostsModel.find(); // Fetch all images
 
-const PostsModel = mongoose.model("Posts", PostSchema);
+    if (!images || images.length === 0) {
+      return res.status(404).send('No images found');
+    }
+
+    res.render('image', { imagesData: images }); // Render all images
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+
 // Assuming PostsModel is your Mongoose model for posts
 function createDummyPosts(numberOfPosts) {
   const dummyPosts = [];
@@ -226,17 +268,35 @@ app.get('/', (req, res) => {
               
               LikesModel.find(
                 {status: 'true'},
-                function (err, Likes) {
+                async function (err, Likes) {
                   if (err) {
                     console.log(err);
                     res.status(500).send("An error occurred while searching.");
                   } else {
-                    //  console.log(Likes)   
-                    res.render("Posts", {
-                      Likeed: Likes,
+
+                    try {
+                      const images = await Imagemodel.find(); 
+                  
+                      if (!images || images.length === 0) {
+                        return res.status(404).send('No images found');
+                      }
+                  
+                      res.render('Posts', {
+                         imagesData: images,                        
+                           Likeed: Likes,
                       commented: Comments,
                       Posted: Post,
-                    });
+                        });
+                    } catch (error) {
+                      console.error(error);
+                      res.status(500).send('Internal Server Error');
+                    }
+                    //  console.log(Likes)   
+                    // res.render("Posts", {
+                    //   Likeed: Likes,
+                    //   commented: Comments,
+                    //   Posted: Post,
+                    // });
                   }
                 }
               );

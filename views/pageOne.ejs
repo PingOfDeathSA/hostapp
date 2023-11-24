@@ -41,18 +41,31 @@ return "Just now";
 </span></span>
 </div>
 
+
 <span><img class="posterimage" src="<%= Posted[i].profliepic %>" alt="profile image"></span>
 <% if (Array.isArray(Posted) && Posted[i] && Posted[i].PostedImage) { %>
   <% if (Posted[i].PostedImage.includes('youtube')) { %>
       <iframe width="560" height="315" class="posterimage2" src="<%= Posted[i].PostedImage %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   <% } else if (Posted[i].PostedImage.trim() !== '') { %>
-      <img class="posterimage2" src="<%= Posted[i].PostedImage %>" alt="profile image">
+    <div class="image-item">
+   
+     
+    </div>
+     
   <% } else { %>
       <div class="empty-div"></div>
   <% } %>
 <% } else { %>
   <div class="empty-div"></div>
 <% } %>
+
+<% if (Posted[i].data) { %>
+  <img class="posterimage2" src="data:<%= Posted[i].contentType %>;base64,<%= Posted[i].data.toString('base64') %>" alt="<%= Posted[i].name %>">
+<% } else { %>
+  
+<% } %>
+  
+
 
 <span class="post-message"><%= Posted[i].Message %></span>
 <div class="iconsContainer">
