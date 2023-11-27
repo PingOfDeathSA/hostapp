@@ -11,7 +11,7 @@ const { render } = require("ejs");
 const MongoStore = require('connect-mongo')(session);
 const LocalStrategy = require('passport-local').Strategy;
 mongoose.set('strictQuery', true);
-
+const nodemailer = require('nodemailer');
 
 
 
@@ -19,6 +19,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
 app.set('trust proxy', 1);
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -44,13 +45,35 @@ mongoose.connect('mongodb+srv://PingOfDeathSA:Ronald438@cluster0.kqlfkdc.mongodb
 const userschema = new mongoose.Schema({
   email: String,
   password: String,
-  companyname: String,
-  Company_image: String,
-  ContactDetails: String
+
+});
+const usersProfilechema = new mongoose.Schema({
+  user: String,
+  name: String,
+  data: Buffer,
+  contentType: String,
+  Date: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
+
+});
+
+const UserProfleModel = mongoose.model("UserProfile", usersProfilechema);
+
+
+
+const passwordresetschema = new mongoose.Schema({
+  token: String,
+  user: String,
 });
 
 
 userschema.plugin(passportLocalMongoose);
+
+
+
 
 
 const UserModel = mongoose.model("User", userschema);
@@ -166,49 +189,325 @@ const LikesModel = mongoose.model("Likes", LikeSchema);
 const PostsModel = mongoose.model("Posts", PostSchema);
 
 const Imagemodel = mongoose.model('Image', imageSchema);
+const TokenModel = mongoose.model("Token_collec", passwordresetschema);
+
+
+app.get("/UseRegister.html", function (req, res) {
+  res.render("registerpage");
+});
+app.get("/logout", function (req, res) {
+  req.logOut(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+
+app.get("/", function (req, res) {
+  res.render("login");
+});
+
+
+app.post("/", function (req, res) {
+  const user = new UserModel({
+    username: req.body.username,
+    password: req.body.password,
+  });
+
+  req.logIn(user, function (err) {
+    if (err) {
+      // handling error 
+      return res.render('errorlogin');
+    }
+
+    passport.authenticate("local", function (err, user, info) {
+      if (err) {
+
+        // handling error 
+        return res.render('errorlogin');
+      }
+
+      if (!user) {
+        // handling error 
+        return res.render('errorlogin');
+      }
+      const userName = user.username;
+      res.redirect('/Dashboard.html')
+    })(req, res);
+  });
+});
+
+app.post("/UseRegister.html", function (req, res) {
+  const username = req.body.username;
+
+  // Check if the username already exists in the database
+  UserModel.findOne({ username: username }, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+      res.redirect("/UseRegister.html");
+    } else {
+      if (foundUser) {
+        // Username already exists
+        console.log("Username already exists");
+        res.render('UserAlreadyregistered')
+      } else {
+        // Username does not exist, proceed with registration
+        UserModel.register({ username: username }, req.body.password, function (err, user) {
+          if (err) {
+
+            res.redirect("/UseRegister.html");
+          } else {
+            // sending new registered users a welcome email
+            console.log('sending email to new user')
+            const emailBody = `
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        margin-bottom: 20px;
+        font-size: 800;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: rgb(26, 25, 25);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to XV-Bolgs!</h1>
+    <p>
+      Dear ${username},
+    </p>
+    <p>
+    Thank you for joining XV-Bolgs! We're excited to have you as part of our Users.
+  </p>
+
+    <p>
+      If you have any questions or need assistance, feel free to contact us at mailapi348@gmail.com.
+    </p>
+    <p>
+      Best regards,<br>
+      The XV-Bolgs Team
+    </p>
+  </body>
+</html>
+`;
+            const transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: {
+                user: 'mailapi348@gmail.com',
+                pass: 'lhhoqgnfyjfgpvvg'
+              }
+            });
+
+            const mailOptions = {
+              from: 'mailapi348@gmail.com',
+              to: username,
+              subject: 'Welcome to PaperPlus',
+              html: emailBody
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.error(error);
+              } else {
+                console.log(`Email sent to ${username}`);
+              }
+            });
+
+
+            passport.authenticate("local")(req, res, function () {
+              res.redirect('/Dashboard.html')
+            });
+          }
+        });
+      }
+    }
+  });
+});
+
+
+app.get('/Dashboard.html', (req, res) => {
+  // authenticating the user
+  if (req.isAuthenticated()) {
+    const user = req.user.username;
+    // fetching the user info from mongoDB
+    UserModel.find({ email: user }, function (err, userfound) {
+      if (err) {
+        console.log(err)
+      } else {
+        PostsModel.find(
+          {},
+          function (err, Post) {
+            if (err) {
+              console.log(err);
+              res.status(500).send("An error occurred while searching.");
+            } else {
+              // console.log("Employee number exits ", Post);
+              CommentModel.find(
+                {},
+                function (err, Comments) {
+                  if (err) {
+                    console.log(err);
+                    res.status(500).send("An error occurred while searching.");
+                  } else {   
+                    
+                    LikesModel.find(
+                      {status: 'true'},
+                      async function (err, Likes) {
+                        if (err) {
+                          console.log(err);
+                          res.status(500).send("An error occurred while searching.");
+                        } else {
+      
+                          try {
+                            const images = await Imagemodel.find(); 
+                        
+                            if (!images || images.length === 0) {
+                              // return res.status(404).send('No images found');
+                            }
+                            UserProfleModel.find(
+                              {},
+                              async function (err, ProfileImage) {
+                                if (err) {
+                                  console.log(err);
+                                  res.status(500).send("An error occurred while searching.");
+                                } else {
+              
+                                  try {
+                                  
+                                    res.render('Posts', {
+                                      ProfileImage: ProfileImage,
+                                       imagesData: images,                        
+                                         Likeed: Likes,
+                                    commented: Comments,
+                                    Posted: Post,
+                                    userisuser: user
+                                      });
+                                  } catch (error) {
+                                    console.error(error);
+                                    res.status(500).send('Internal Server Error');
+                                  }
+                                  //  console.log(Likes)   
+                                  // res.render("Posts", {
+                                  //   Likeed: Likes,
+                                  //   commented: Comments,
+                                  //   Posted: Post,
+                                  // });
+                                }
+                              }
+                            );
+
+
+                          } catch (error) {
+                            console.error(error);
+                            res.status(500).send('Internal Server Error');
+                          }
+                          //  console.log(Likes)   
+                          // res.render("Posts", {
+                          //   Likeed: Likes,
+                          //   commented: Comments,
+                          //   Posted: Post,
+                          // });
+                        }
+                      }
+                    );
+                   
+                  }
+                }
+              );
+             
+            }
+          }
+        );
+      }
+    });
+  } else {
+    res.redirect("/")
+  }
+});
+
+app.post('/delete', async (req, res) => {
+  const postId = req.body._id; 
+
+  try {
+    
+    const postsToDelete = await PostsModel.find({ _id: postId });
+
+    if (postsToDelete.length === 0) {
+      return res.status(404).json({ message: 'No posts found for deletion' });
+    }
+
+ 
+    const deletionResult = await PostsModel.deleteMany({ _id: postId });
+
+    if (deletionResult.deletedCount === 0) {
+      return res.status(404).json({ message: 'No posts were deleted' });
+    }
+
+    res.redirect('/Dashboard.html')
+ 
+  } catch (error) {
+
+    console.error(error);
+    return res.status(500).json({ message: 'An error occurred while deleting the posts' });
+  }
+});
 
 // Handle file upload POST request
 app.post('/upload', upload.single('image'), async (req, res) => {
-  try {
-    const { originalname, buffer, mimetype } = req.file;
-    const message = req.body.message; // Corrected to 'req.body.message'
-
-    console.log('message content:', message);
-
-    const newImage = new PostsModel({
-      name: originalname,
-      data: buffer,
-      contentType: mimetype,
-      profliepic: 'https://images.pexels.com/photos/834863/pexels-photo-834863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      PostedBy: 'New Only',
-      Message: message,
-      Date: Date.now(),
-    });
+  if (req.isAuthenticated()) {
+    const user = req.user.username;
+    // fetching the user info from mongoDB
+    UserModel.find({ email: user }, async function (err, userfound) {
+      if (err) {
+        console.log(err)
+      } else {
     
-    await newImage.save();
+        try {
+          const { originalname, buffer, mimetype } = req.file;
+          const message = req.body.message; // Corrected to 'req.body.message'
+        
+          console.log('message content:', message);
+        
+          const newImage = new PostsModel({
+            name: originalname,
+            data: buffer,
+            contentType: mimetype,
+            profliepic: 'https://images.pexels.com/photos/834863/pexels-photo-834863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+            PostedBy: user,
+            Message: message,
+            Date: Date.now(),
+          });
+          
+          await newImage.save();
+        
+          res.redirect('/Dashboard.html')
+        } catch (error) {
+          console.error(error);
+          res.status(500).send('An error occurred while uploading the image.');
+        }
 
-    res.redirect('/')
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('An error occurred while uploading the image.');
+      }
+    });
+  } else {
+    res.redirect("/")
   }
+  
 });
 
 
-app.get('/images', async (req, res) => {
-  try {
-    const images = await PostsModel.find(); // Fetch all images
-
-    if (!images || images.length === 0) {
-      return res.status(404).send('No images found');
-    }
-
-    res.render('image', { imagesData: images }); // Render all images
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
 
 
 
@@ -243,225 +542,263 @@ const fiftyDummyPosts = createDummyPosts(numberOfPostsToCreate);
 // });
 
 
+app.post('/profile_picture', upload.single('image'), async (req, res) => {
+  try {
+    if (req.isAuthenticated()) {
+      const user = req.user.username;
+      // Fetching the user info from MongoDB
+      const userFound = await UserModel.findOne({ username: user });
+      
+      if (userFound) {
+        const { originalname, buffer, mimetype } = req.file;
 
+        console.log('Message content:', originalname);
 
+        // Check if user profile exists
+        const userProfile = await UserProfleModel.findOne({ user: user });
 
+        if (!userProfile) {
+          // If profile doesn't exist, create a new one
+          const newProfile = new UserProfleModel({
+            name: originalname,
+            data: buffer,
+            contentType: mimetype,
+            user: user,
+            date: Date.now(),
+          });
 
+          await newProfile.save();
+        } else {
+          userProfile.name = originalname;
+          userProfile.data = buffer;
+          userProfile.contentType = mimetype;
 
+          await userProfile.save();
+        }
 
-app.get('/', (req, res) => {
-  PostsModel.find(
-    {},
-    function (err, Post) {
-      if (err) {
-        console.log(err);
-        res.status(500).send("An error occurred while searching.");
+        return res.redirect('/Dashboard.html');
       } else {
-        // console.log("Employee number exits ", Post);
-        CommentModel.find(
-          {},
-          function (err, Comments) {
-            if (err) {
-              console.log(err);
-              res.status(500).send("An error occurred while searching.");
-            } else {   
-              
-              LikesModel.find(
-                {status: 'true'},
-                async function (err, Likes) {
-                  if (err) {
-                    console.log(err);
-                    res.status(500).send("An error occurred while searching.");
-                  } else {
-
-                    try {
-                      const images = await Imagemodel.find(); 
-                  
-                      if (!images || images.length === 0) {
-                        return res.status(404).send('No images found');
-                      }
-                  
-                      res.render('Posts', {
-                         imagesData: images,                        
-                           Likeed: Likes,
-                      commented: Comments,
-                      Posted: Post,
-                        });
-                    } catch (error) {
-                      console.error(error);
-                      res.status(500).send('Internal Server Error');
-                    }
-                    //  console.log(Likes)   
-                    // res.render("Posts", {
-                    //   Likeed: Likes,
-                    //   commented: Comments,
-                    //   Posted: Post,
-                    // });
-                  }
-                }
-              );
-             
-            }
-          }
-        );
-       
+        return res.status(404).send('User not found');
       }
+    } else {
+      return res.redirect('/');
     }
-  );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('An error occurred while uploading the image.');
+  }
 });
 
 
+
+
 app.post('/Like', async (req, res) => {
-  const postId = req.body.postId;
-  const userId = 'No man';
-  const likedStatus = req.body.like;
-
-  let found = false;
-
-  // Find all documents matching the userId and postId
-  LikesModel.find({ Likeby: userId, Postid: postId }, async (err, existingLikes) => {
-    if (err) {
-      console.error(err);
-      // Handle the error
-    } else {
-      for (const existingLike of existingLikes) {
-        if (existingLike.Likeby === userId && existingLike.Postid === postId) {
-          found = 'true';
-          const DBlikeStatus = existingLike.status;
-
-          if (DBlikeStatus === 'false') {
-            existingLike.status = 'true';
-          } else {
-            existingLike.status = 'false';
-          }
-
-          existingLike.Date = Date.now();
-
-          try {
-            const updatedLike = await existingLike.save();
-            console.log('Updated Like:', updatedLike);
-          } catch (err) {
+  if (req.isAuthenticated()) {
+    const user = req.user.username;
+    // fetching the user info from mongoDB
+    UserModel.find({ email: user }, async function (err, userfound) {
+      if (err) {
+        console.log(err)
+      } else {
+    
+        const postId = req.body.postId;
+        const userId = user;
+        const likedStatus = req.body.like;
+      
+        let found = false;
+      
+        // Find all documents matching the userId and postId
+        LikesModel.find({ Likeby: userId, Postid: postId }, async (err, existingLikes) => {
+          if (err) {
             console.error(err);
             // Handle the error
+          } else {
+            for (const existingLike of existingLikes) {
+              if (existingLike.Likeby === userId && existingLike.Postid === postId) {
+                found = 'true';
+                const DBlikeStatus = existingLike.status;
+      
+                if (DBlikeStatus === 'false') {
+                  existingLike.status = 'true';
+                } else {
+                  existingLike.status = 'false';
+                }
+      
+                existingLike.Date = Date.now();
+      
+                try {
+                  const updatedLike = await existingLike.save();
+                  console.log('Updated Like:', updatedLike);
+                } catch (err) {
+                  console.error(err);
+                  // Handle the error
+                }
+              }
+            }
+      
+            if (!found) {
+              console.log('No existing like found');
+              const newLike = new LikesModel({
+                Likeby: userId,
+                status: likedStatus,
+                Date: Date.now(),
+                Postid: postId,
+              });
+      
+              try {
+                const savedLike = await newLike.save();
+                console.log('New like created:', savedLike);
+              } catch (err) {
+                console.error(err);
+                // Handle the error
+              }
+            }
+      
+            res.redirect('/Dashboard.html')
           }
-        }
-      }
-
-      if (!found) {
-        console.log('No existing like found');
-        const newLike = new LikesModel({
-          Likeby: userId,
-          status: likedStatus,
-          Date: Date.now(),
-          Postid: postId,
         });
-
-        try {
-          const savedLike = await newLike.save();
-          console.log('New like created:', savedLike);
-        } catch (err) {
-          console.error(err);
-          // Handle the error
-        }
+  
       }
-
-      res.redirect('/');
-    }
-  });
+    });
+  } else {
+    res.redirect("/")
+  }
+  
 });
 
 
 
 
 app.post('/comments', (req, res) => {
-  const comment = req.body.comment;
-   const postid = req.body.postId;
-   console.log('Received postid:', postid);
-  console.log('Received comment:', comment);
-  const CommetSave = new CommentModel({
-    CommentedBy: `The Only `,
-    Message: comment,
-    profilelike:'https://images.pexels.com/photos/834863/pexels-photo-834863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    Postid: postid,
-    Date: Date.now(),
-  });
-  CommetSave.save(function (err) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("CommentedBy added");
-            }
-  });
-  res.redirect("/",);
-});
-
-
-app.post("/AddnewItem", function (req, res) {
-
   if (req.isAuthenticated()) {
     const user = req.user.username;
-
-    // Retrieve form data
-    const productName = req.body.ProductName;
-    const contactNumber = req.body.Contactnumber;
-    const price = req.body.Price;
-    const category = req.body.category;
-    const imageLink1 = req.body.Imagelink1;
-    const imageLink2 = req.body.Imagelink2;
-    const imageLink3 = req.body.Imagelink3;
-    const imageLink4 = req.body.Imagelink4;
-    const details = req.body.Details;
-
-
-
-
-    // // Validate the form input data before saving
-    // if (!category || !price || !contactNumber || !productName) {
-    //     return res.status(400).send("Please fill in all required fields");
-    // }
-    console.log(user);
-    console.log(productName);
-    console.log(contactNumber);
-    console.log(price);
-    console.log(category);
-    console.log(imageLink1);
-    console.log(imageLink2);
-    console.log(imageLink3);
-    console.log(imageLink4);
-    console.log(details);
-
-
-    const PayrollSave = new Productmodel(
-      {
-
-        Product_Name: productName,
-        imageProductMain: imageLink1,
-        imageProduct1: imageLink2,
-        imageProduct2: imageLink3,
-        imageProduct3: imageLink4,
-        Contacts: contactNumber,
-        price: price,
-        ItemCategory: category,
-        details: details,
-        Date: Date.now(),
-        PostedBy: user
-
-      });
-    PayrollSave.save()
-      .then(() => res.redirect("/"))
-      .catch(err => {
-        console.error(err);
-        res.status(500).send(`
-          <div style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-            <strong>Error:</strong> ${err}
-          </div>
-        `);
-      });
-
+    // fetching the user info from mongoDB
+    UserModel.find({ email: user }, function (err, userfound) {
+  
+      if (err) {
+        console.log(err)
+      } else {
+        const comment = req.body.comment;
+        const postid = req.body.postId;
+        console.log('Received postid:', postid);
+       console.log('Received comment:', comment);
+       const CommetSave = new CommentModel({
+         CommentedBy: user,
+         Message: comment,
+         profilelike:'https://images.pexels.com/photos/834863/pexels-photo-834863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+         Postid: postid,
+         Date: Date.now(),
+       });
+       CommetSave.save(function (err) {
+                 if (err) {
+                   console.log(err);
+                 } else {
+                   console.log("CommentedBy added");
+                 }
+       });
+       res.redirect('/Dashboard.html')
+      }
+    })
   } else {
-    res.redirect('/')
+    res.redirect("/")
   }
+ 
+});
 
+app.get("/forgotpassword.html", function (req, res) {
+  res.render("passwordreset");
+});
+
+
+
+
+app.post("/forgotpassword.html", function (req, res) {
+  const username = req.body.username;
+
+  // Check if the username already exists in the TokenModel
+  UserModel.findOne({ username: username }, function (err, foundUser) {
+    if (err) {
+      console.log("error No user Found")
+
+    } else {
+      if (foundUser) {
+
+        // Check if the username already exists in the TokenModel
+        TokenModel.findOne({ user: username }, function (err, foundToken) {
+          if (err) {
+            res.render("User email not found");
+          } else {
+            if (foundToken) {
+              // User already has a token, delete the token
+              TokenModel.deleteOne({ user: username }, function (err) {
+                if (err) {
+                  console.error(err);
+                  // Handle the error condition
+                } else {
+                  console.log("Previous token deleted");
+                  // Proceed with generating and sending a new token
+                  generateAndSendToken(username);
+                }
+              });
+            } else {
+              // User does not have a token, proceed with generating and sending a new token
+              generateAndSendToken(username);
+            }
+          }
+        });
+
+        function generateAndSendToken(username) {
+          // Generate a reset token
+          const tokenLength = 32;
+          const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+          let token = "";
+          for (let i = 0; i < tokenLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            token += characters.charAt(randomIndex);
+          }
+
+          // Save the token and user in the TokenModel
+          TokenModel.create({ token: token, user: username }, function (err, results) {
+            if (err) {
+              console.error(err);
+              // Handle the error condition
+            } else {
+              console.log("Token saved:", results);
+
+              // Send the token to the user
+              const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'mailapi348@gmail.com',
+                  pass: 'lhhoqgnfyjfgpvvg'
+                }
+              });
+
+              const mailOptions = {
+                from: 'mailapi348@gmail.com',
+                to: username,
+                subject: 'Password Reset Instructions',
+                text: `Dear ${username},\n\nPlease use the following token to reset your password: ${token}`
+              };
+
+              transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                  console.error(error);
+                  // Handle the error condition
+                } else {
+                  console.log(`Email sent to ${username}: ${info.response}`);
+                  // Redirect or send a response indicating that the token has been sent
+                  res.render("ResertPage");
+                }
+              });
+            }
+          });
+        }
+      } else {
+        res.render('tokenrror')
+      }
+    }
+  });
 
 
 });
@@ -469,432 +806,65 @@ app.post("/AddnewItem", function (req, res) {
 
 
 
+app.get("/Resetpassword.html", function (req, res) {
+  res.render("ResetPage");
+});
 
+app.post("/Resetpassword.html", function (req, res) {
+  const username = req.body.username;
+  const token = req.body.token;
+  const newPassword = req.body.password;
 
+  // Check if the username and token match in the TokenModel
+  TokenModel.findOne({ user: username, token: token }, function (err, foundToken) {
+    if (err) {
+      console.log(err);
+      // Handle the error condition
+    } else {
+      if (foundToken) {
+        // Username and token match
 
-
-// Starting Sever
+        // Find and delete the user in the UserModel
+        UserModel.findOneAndDelete({ username: username }, function (err, deletedUser) {
+          if (err) {
+            console.log(err);
+            // Handle the error condition
+          } else {
+            if (deletedUser) {
+              // Register the user with the new email and password
+              UserModel.register({ username: username, email: username }, newPassword, function (err, user) {
+                if (err) {
+                  console.log(err);
+                  // Handle the error condition
+                  res.redirect("/UseRegister.html");
+                } else {
+                  passport.authenticate("local")(req, res, function () {
+                    // Delete the user's token from the TokenModel
+                    TokenModel.deleteOne({ user: username }, function (err) {
+                      if (err) {
+                        console.log(err);
+                        // Handle the error condition
+                      } else {
+                        console.log("Token deleted");
+                        res.redirect("/Dashboard.html");
+                      }
+                    });
+                  });
+                }
+              });
+            } else {
+              // User not found in the UserModel
+              res.status(404).send("User not found. Please check your credentials.");
+            }
+          }
+        });
+      } else {
+        // Username and token do not match in the TokenModel
+        res.render('invalidtoken');
+      }
+    }
+  });
+});
 app.listen(5000, function () {
   console.log("Server started on port 5000");
 });
-
-app.post('/search', (req, res) => {
-  const searchQuery = req.body.searchQueryName.toLowerCase();
-
-  console.log("Search Query: ", searchQuery);
-  Productmodel.find(
-    {
-      $or: [
-        { Product_Name: { $regex: searchQuery, $options: "i" } },
-        { price: { $regex: searchQuery, $options: "i" } },
-        { details: { $regex: searchQuery, $options: "i" } }
-      ]
-    },
-    function (err, Productresults) {
-      if (err) {
-        console.log(err);
-        res.status(500).send("An error occurred while searching.");
-      } else {
-        // console.log(EmployeeDetails);
-        res.render("Market", { listTitle: "Today", Learn: Productresults });
-      }
-    }
-  );
-});
-app.post('/search2', (req, res) => {
-  const searchQuery = req.body.searchQueryName.toLowerCase();
-
-  console.log("Search Query: ", searchQuery);
-  Productmodel.find(
-    {
-      $or: [
-        { Product_Name: { $regex: searchQuery, $options: "i" } },
-        { price: { $regex: searchQuery, $options: "i" } },
-        { details: { $regex: searchQuery, $options: "i" } }
-      ]
-    },
-    function (err, Productresults) {
-      if (err) {
-        console.log(err);
-        res.status(500).send("An error occurred while searching.");
-      } else {
-        // console.log(EmployeeDetails);
-        res.render("MyItems", { listTitle: "Today", Learn: Productresults });
-      }
-    }
-  );
-});
-
-app.get("/logout", function (req, res) {
-  req.logOut(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
-});
-
-
-app.get("/Login.html", function (req, res) {
-  if (req.isAuthenticated()) {
-
-    Productmodel.find({}, function (err, Product) {
-      if (err) {
-        console.log(err);
-      } else {
-        const user = req.user.username;
-
-        UserModel.find({ email: user }, function (err, users) {
-          if (err) {
-            console.log(err);
-          } else {
-            //  console.log("Number of users:", users.length);
-            //  console.log("Logged-in user email:", user);
-            res.render("AddnewItem", {
-              listTitle: "Today",
-              Learn: Product,
-              userEmail: user,
-              userEmailHTML: user.username,
-              ComapanyNmae: user.companyname,
-            });
-          }
-        });
-      }
-    });
-
-  } else {
-    res.redirect("/")
-  }
-});
-
-app.post('/delete-item', (req, res) => {
-  if (req.isAuthenticated()) {
-    const user = req.user.username;
-    const itemId = req.body.itemId;
-
-    Productmodel.findOneAndDelete({ _id: itemId, PostedBy: user }, (err, deletedItem) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send('Error occurred during deletion');
-      } else if (!deletedItem) {
-        res.status(404).send('Item not found or you do not have permission to delete it');
-      } else {
-        res.send('Item deleted successfully');
-      }
-    });
-  } else {
-    res.redirect('/');
-  }
-});
-
-app.get("/MyItems.html", function (req, res) {
-  if (req.isAuthenticated()) {
-    const user = req.user.username;
-
-    Productmodel.find({ PostedBy: user }, function (err, EmployeeDetails) {
-      if (err) {
-        console.log(err);
-      } else {
-        const user = req.user;
-
-        UserModel.find({ PostedBy: user }, function (err, users) {
-          if (err) {
-            console.log(err);
-          } else {
-            // console.log("Number of users:", users.length);
-            // console.log("Logged-in user email:", user);
-            res.render("MyItems", {
-              listTitle: "Today",
-              Learn: EmployeeDetails,
-              userEmail: user,
-              userEmailHTML: user.username,
-              ComapanyNmae: user.companyname,
-            });
-          }
-        });
-      }
-    });
-
-  } else {
-    res.redirect("/")
-  }
-});
-
-
-
-
-app.get('/Inbox.html', (req, res) => {
-
-  if (req.isAuthenticated()) {
-    const user = req.user.username;
-
-    UserModel.find(
-      { username: user },
-      function (err, User) {
-        if (err) {
-          console.log(err);
-          res.status(500).send("An error occurred while searching.");
-        } else {
-          Productmodel.find(
-
-
-            { PostedBy: user },
-            function (err, UserPosted) {
-              if (err) {
-                console.log(err);
-                res.status(500).send("An error occurred while searching.");
-              } else {
-                // console.log("UsersPosts ", UserPosted);
-
-
-                function getIdsFromUserPosted(UserPosted) {
-                  return UserPosted.map(item => item._id.toString());
-                }
-                var ids = getIdsFromUserPosted(UserPosted);
-                console.log(ids);
-                ChatsModel.find({ ProductID: { $in: ids } }, function (err, FoundChats) {
-                  if (err) {
-                    console.log(err);
-                    res.status(500).send("An error occurred while searching.");
-                  } else {
-
-                    Productmodel.find({ _id: { $in: ids } }, function (err, FoundProducts) {
-                      if (err) {
-                        console.log(err);
-                        res.status(500).send("An error occurred while searching.");
-                      } else {
-
-
-                        const finalList = FoundChats.map(chat => {
-                          const foundProduct = FoundProducts.find(product => product._id.toString() === chat.ProductID.toString());
-                          if (foundProduct) {
-                            return {
-                              ...chat.toObject(),
-                              Product_Name: foundProduct.Product_Name,
-                              imageProductMain: foundProduct.imageProductMain
-                            };
-                          } else {
-                            return chat.toObject();
-                          }
-                        });
-                        
-                        console.log(finalList);
-                        
-                        
-
-
-
-                        // console.log("Messages", FoundChats);
-                        res.render("inbox", {
-                          Testing: 'testing',
-                          Learn: finalList,
-                          // Products: FoundProducts,
-                          user: user,
-                        });
-                        // Process the FoundChats as needed
-                        // res.render("Market", { Testing: 'testing', Learn: ProductDetails });
-                      }
-                    });
-
-
-                  }
-                });
-
-              }
-            }
-          );
-
-
-
-          console.log("Messages ", User);
-
-        }
-      }
-    );
-
-
-  } else {
-    res.redirect("/")
-  }
-
-});
-
-
-
-
-
-app.get('/outbox.html', (req, res) => {
-  if (req.isAuthenticated()) {
-    const user = req.user.username;
-
-    ChatsModel.find({ PostedBy: user }, function (err, FoundChats) {
-      if (err) {
-        console.log(err);
-        res.status(500).send("An error occurred while searching.");
-      } else {
-        const productIds = FoundChats.map(chat => chat.ProductID);
-
-        Productmodel.find({ _id: { $in: productIds } }, function (err, FoundProducts) {
-          if (err) {
-            console.log(err);
-            res.status(500).send("An error occurred while searching.");
-          } else {
-            const finalList = FoundChats.map(chat => {
-              const foundProduct = FoundProducts.find(product => product._id.toString() === chat.ProductID.toString());
-              if (foundProduct) {
-                return {
-                  ...chat.toObject(),
-                  Product_Name: foundProduct.Product_Name,
-                  imageProductMain: foundProduct.imageProductMain
-                };
-              } else {
-                return chat.toObject();
-              }
-            });
-
-            console.log(finalList);
-
-            res.render("outbox", {
-              Testing: 'testing',
-              Learn: finalList,
-              user: user,
-            });
-          }
-        });
-      }
-    });
-  } else {
-    res.redirect("/");
-  }
-});
-
-
-
-
-// app.get("/",function(req, res){
-//   res.render("Market");
-// });
-
-
-
-
-
-app.post("/BuyerLogin.html", function (req, res) {
-
-  if (req.isAuthenticated()) {
-    const user = req.user.username;
-
-    Productmodel.find(
-      {},
-      function (err, ProductDetails) {
-        if (err) {
-          console.log(err);
-          res.status(500).send("An error occurred while searching.");
-        } else {
-          console.log("Employee number exits ", ProductDetails);
-
-          res.render("Buyermarket", {
-            Testing: 'testing',
-            Learn: ProductDetails,
-          });
-        }
-      }
-    );
-
-  } else {
-    res.redirect("/")
-  }
-
-
-});
-
-
-app.post("/Login.html", function (req, res) {
-  const user = new UserModel({
-    username: req.body.username,
-    password: req.body.password,
-  })
-  req.logIn(user, function (err) {
-    if (err) {
-      console.log(err)
-    } else {
-      passport.authenticate("local")(req, res, function () {
-
-        Productmodel.find({}, function (err, EmployeeDetails) {
-          if (err) {
-            console.log(err);
-          } else {
-            const user = req.user;
-
-            UserModel.find({ email: user.email }, function (err, users) {
-              if (err) {
-                console.log(err);
-              } else {
-                // console.log("Number of users:", users.length);
-                // console.log("Logged-in user email:", user);
-                res.render("AddnewItem", {
-                  listTitle: "Today",
-                  Learn: EmployeeDetails,
-                  userEmail: user,
-                  userEmailHTML: user.username,
-                  ComapanyNmae: user.companyname,
-                });
-              }
-            });
-          }
-        });
-
-
-      })
-    }
-
-  })
-
-});
-
-
-
-
-
-
-app.get("/UseRegister.html", function (req, res) {
-  res.render("UserRegister");
-});
-app.post("/UseRegister.html", function (req, res) {
-
-  UserModel.register({ username: req.body.username, StudentNumber: req.body.StudentNumber, }, req.body.password, function (err, user) {
-    if (err) {
-      console.log(err);
-      res.redirect("/UseRegister.html");
-    } else {
-      passport.authenticate("local")(req, res, function () {
-        res.redirect("/");
-      })
-    }
-  });
-});
-
-
-
-
-
-
-
-
-app.get("/register.html", function (req, res) {
-  res.render("registerpage");
-});
-app.post("/register.html", function (req, res) {
-
-  UserModel.register({ username: req.body.username, StudentNumber: req.body.StudentNumber, }, req.body.password, function (err, user) {
-    if (err) {
-      console.log(err);
-      res.redirect("/register.html");
-    } else {
-      passport.authenticate("local")(req, res, function () {
-        res.redirect("/");
-      })
-    }
-  });
-});
-

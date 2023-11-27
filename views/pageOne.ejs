@@ -3,6 +3,8 @@
 
 <div class="topsapce"></div>
 
+
+
 <ul class="post-list">
     <% for (var i = 0; i < Posted.length; i++) { %>
    <!-- Your existing HTML structure -->
@@ -38,11 +40,67 @@ return "Just now";
 <!-- Then use it within your template -->
 <div class="posted-by">
 <%= Posted[i].PostedBy %> <span class="posted-time" ><%= getTimeAgo(Posted[i].Date) %> <span><i class="fa fa-globe" style="font-size:14px;color:F4BF96"></i>
-</span></span>
+ 
+
+  <% if (Posted[i].PostedBy === userisuser.toString()) { %>
+    <!-- Display delete icon for authorized users -->
+ <span><form id="deleteForm_<%= Posted[i]._id %>" method="POST" action="/delete">
+  <input type="hidden" name="_id" value="<%= Posted[i]._id %>">
+  <button type="submit" class="delete-button" data-id="<%= Posted[i]._id %>">
+    <i class="fa fa-times" style="font-size: 14px; color: red;position: absolute; right: 20px;"></i>
+  </button>
+</form></span>   
+  <% } else { %>
+    <!-- Display nothing for unauthorized users -->
+  <% } %>
+  
+  <script>
+    // Add an event listener to handle form submission via AJAX
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const postId = this.getAttribute('data-id');
+        const form = document.getElementById(`deleteForm_${postId}`);
+        // AJAX request
+        fetch('/delete', {
+          method: 'POST',
+          body: new FormData(form)
+        }).then(response => {
+          // Handle the response as needed
+          // For example, you might want to remove the deleted post from the UI
+          if (response.ok) {
+            // Assuming successful deletion, you can remove the post from the DOM
+            const postElement = document.getElementById(`post_${postId}`);
+            if (postElement) {
+              postElement.remove();
+            }
+          }
+        }).catch(error => {
+          console.error('Error:', error);
+        });
+      });
+    });
+
+
+    
+  </script>
+  
+
+  
+  </span>
+ 
 </div>
 
 
-<span><img class="posterimage" src="<%= Posted[i].profliepic %>" alt="profile image"></span>
+<% let userProfileImage2 = ProfileImage.find(profile => profile.user === Posted[i].PostedBy.toString()); %>
+<% if (userProfileImage2) { %>
+  <img class="posterimagee" src="data:<%= userProfileImage2.contentType %>;base64,<%= userProfileImage2.data.toString('base64') %>" alt="Profile Image">
+<% } else { %>
+  <p></p>
+<% } %>
+
+
 <% if (Array.isArray(Posted) && Posted[i] && Posted[i].PostedImage) { %>
   <% if (Posted[i].PostedImage.includes('youtube')) { %>
       <iframe width="560" height="315" class="posterimage2" src="<%= Posted[i].PostedImage %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -95,10 +153,9 @@ return "Just now";
       <span class="likebutton">
         <% var LikeedCount = 0; %>
         <% for (var j = 0; j < Likeed.length; j++) { %>
-          <% if (Likeed[j].Likeby.toString() === 'No man' && Likeed[j].Postid.toString() === Posted[i]._id.toString()) { %>
+          <% if (Likeed[j].Likeby.toString() === userisuser.toString() && Likeed[j].Postid.toString() === Posted[i]._id.toString()) { %>
             <% LikeedCount++; %>
           <% } %>
-          
         <% } %>
         <i class="fa fa-heart" style="color: <%= LikeedCount > 0 ? 'red' : 'gray' %>;"></i>
 
@@ -124,7 +181,13 @@ return "Just now";
 <%= commentCount > 0 ? commentCount : '' %>
 </span>
 </span>
-<span class="icon3"><i class="fa fa-star" style="color:rgb(162, 197, 121);"></i></span>
+
+<!-- HTML for the share icon -->
+<span class="icon3" id="shareIcon">
+  <i class="fa fa-share" style="color:rgb(162, 197, 121); cursor: pointer;"></i>
+</span>
+
+
 
 
 
@@ -150,7 +213,21 @@ return "Just now";
 <div class="comment-item">
 
 <div class="comment-content">
-  <img class="imagecommeter" src="<%= commented[j].profilelike %>" alt="profile image">
+  <% Posted.forEach((post, i) => { %>
+    <% let profileFound = false; %>
+    <% ProfileImage.forEach((profile, j) => { %>
+      <% if (post.PostedBy === profile.user) { %>
+        <% profileFound = true; %>
+        <img class="imagecommeter" src="data:<%= ProfileImage[i].contentType %>;base64,<%= ProfileImage[i].data.toString('base64') %>" alt="<%= ProfileImage[i].name %>">
+      <% } %>
+    <% }) %>
+    <% if (!profileFound) { %>
+      <!-- Display a default image or handle the case where the profile image is not found -->
+      <p>No profile image found for this user</p>
+    <% } %>
+  <% }) %>
+  
+
   <span class="comment-message"><%= commented[j].Message %></span>
 </div>
 
@@ -192,6 +269,8 @@ width: 300px;
 height: 150px;
 object-fit: cover;
     }
+
+
     .linetop{
       border-top-width:1px ;
       border-bottom-width:0px ;
@@ -200,3 +279,24 @@ object-fit: cover;
       border-color: rgb(228, 228, 228);
     }
   </style>
+  <!-- JavaScript to handle the click event on the share icon -->
+
+<script>
+  const shareIcon = document.getElementById('shareIcon');
+
+  // Phone number to share with (replace with the desired phone number)
+  const phoneNumber = '1234567890';
+
+  // Message to share (replace with the desired message)
+  const message = 'Check out this awesome content!';
+
+  // Add a click event listener to the share icon
+  shareIcon.addEventListener('click', function() {
+    // Create a share link using the whatsapp:// protocol
+    const shareLink = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+
+    // Open the WhatsApp application with the share link
+    window.location.href = shareLink;
+  });
+</script>
+

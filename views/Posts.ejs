@@ -16,14 +16,24 @@
  padding-right: 25px;
  padding-left: 20px;
   }
+  .posterimagee{
+      border-radius: 5px;
+width: 40px;
+height: 30px;
+object-fit: cover;
+    }
 </style>
-<!-- In your EJS template file -->
-
-
-
 
     <body> 
       <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    
+        <% let userProfileImage = ProfileImage.find(profile => profile.user === userisuser.toString()); %>
+        <% if (userProfileImage) { %>
+          <img class="posterimagee" src="data:<%= userProfileImage.contentType %>;base64,<%= userProfileImage.data.toString('base64') %>" alt="Profile Image">
+        <% } else { %>
+          <p></p>
+        <% } %>
+        
         <h5 class="sidebar-item" data-number="1">  <i class="fa fa-pencil"></i> Blogs 
           <h5 class="sidebar-item" data-number="2"><i class="fa fa-user"></i> Profile</h5>
           <h5 class="sidebar-item" data-number="3"><i class="fa fa-heart"></i> Favorite</h5>
@@ -47,11 +57,7 @@
 
           </div>
           <div class="content" id="content-3" style="display: none;">
-            <ul>
-              <% for (var i = 0; i < Posted.length; i++) { %>
-                <li class="test"><%= Posted[i].PostedBy %> 3 <%= Posted[i].Message %></li>
-              <% } %>
-            </ul>
+            <%- include("blogadd.ejs") -%>
           </div>
           <div class="content" id="content-4" style="display: none;">
             <ul>

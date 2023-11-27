@@ -1,142 +1,339 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
-    <link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
-    <meta name="theme-color" content="#712cf9">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link rel="stylesheet" href="public/css/style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="animation.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/mobile.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-4hgekvrEahtkvkzXyDEZTQmqKgrm7zBWlQ/HvzOfN1Vf6rH0RNjq4RSP9Xu+nIJ3zqGOQ4SgDI3k/WTHT4w6sQ=="
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+  <!-- top section -->
+  <section class="Top-section">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+    </div>
+  </section>
+
+  <!-- middle section -->
+  <section class="Middle-section">
+    <div class="row">
+      <div class="col-12 col-md-4">
+
+        <style>
+          .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 40vh;
+          }
+          
+          .circle2 {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid rgb(206, 122, 163);
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .fa-envelope {
+            font-size: 24px;
+            color:  rgb(206, 122, 163);
+          }
+          
+          .text {
+            color: darkpink;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-shadow: 2px 2px 4px #4b4b4b;
+          }
+          .iconbg{
+            font-family: Tahoma,Sans-Serif;
+            background-color: aliceblue;
+            border-radius: 5px;
+            padding-bottom: 3px;
+            padding-left: 3px;
+            padding-right: 3px;
+            opacity: 0.7;
+            margin-top: 4px;
+          }
     
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-  
- </head>
-
-  <%- include('partials/header') %>
-
-  <div class="Regisbody">
-
-    <div class="">
-    
-      <div class="row">
+          h6{
+            
+            text-shadow: 2px 2px 4px #4b4b4b;
+          }
+          .regitster-button{
+            color: red;
+          }
+          .inputs{
+            color: aliceblue;
+            text-shadow: 2px 2px 4px #4b4b4b;
+          }
+          .fas{
+            color :rgb(206, 122, 163);
+          }
+          .form-control{
+          border-radius: 10px;
+          }
+          .headerLogin{
+            font-family: Tahoma,Sans-Serif;
+          }
+        </style>
         <div class="container">
+
+          <div class="circle2">
+            <i class="fas fa-envelope"></i>
+          </div>
+       <h6 class="iconbg"><span style="color: rgb(206, 122, 163); font-size: 30px; display: inline-block;">Paper</span><span style="color: black; font-size: 30px; display: inline-block;">Plus</span></h6>   
+      
+      
+        </div>
+
+
+
+
+
+
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-4">
+
+
           <div class="row">
-            <div class="col-6">  <h1 class="display-3" style="font-size: 50px; font-weight:bold; margin:50px">TUT Market Place</h1>   <p class="lead"></p> <a href="/" class="btn btn-danger">Log in</a>
+
+
+          </div>
+          <div class="row">
+
+
+          </div>
+
+
+        </div>
+
+
+
+      </div>
+
     
-          
+      <div class="col-12 col-md-4">
+
+        <div class="Form">
+          <div class="Login">
+            <div class="headerLogin">
+              <h6 class=""><span
+                  style="color:  rgb(206, 122, 163); font-size: 30px; display: inline-block;">Paper</span><span
+                  style="color: black; font-size: 30px; display: inline-block;">Plus</span> </h6>
+
+              <div class="formDiv">
+                <form action="/UseRegister.html" method="POST">
+                  <div class="form-group">
+                    <div class="form-group">
+                      <label for="email" class="inputs">Email</label>
+                      <div class="row">
+                        <div class="col-1 col-md-1"><i
+                          class="fas fa-user fade-in-out"></i> </div>
+                        <div class="col-10 col-md-1o"><input type="email" class="form-control col-12" name="username" placeholder="username"></div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="password" class="inputs">Create Password</label>
+                      <div class="row">
+                        <div class="col-1 col-md-1"><i
+                          class="fas fa-lock fade-in-out"></i> </div>
+                        <div class="col-10 col-md-1o">
+                          <div class="input-group" style="border-radius: 10px;">
+                            <input type="password" class="form-control col-12" id="password" name="password" required
+                             >
+                            <div class="input-group-append" >
+                              <span class="input-group-text" id="password-toggle">
+                                <i class="fas fa-eye-slash"></i>
+                              </span>
+                            </div>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script>
+                              $(document).ready(function () {
+                                $('#password-toggle').click(function () {
+                                  var passwordInput = $('#password');
+                                  var icon = $(this).find('i');
+      
+                                  if (passwordInput.attr('type') === 'password') {
+                                    passwordInput.attr('type', 'text');
+                                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                                  } else {
+                                    passwordInput.attr('type', 'password');
+                                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                                  }
+                                });
+                              });
+                            </script>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="password2" class="inputs">Confirm Password</label>
+                      <div class="row">
+                        <div class="col-1 col-md-1"><i
+                          class="fas fa-lock fade-in-out"></i></div>
+                        <div class="col-10 col-md-1o">
+                          <input type="password" class="form-control col-12" id="password2" required>
+                
+                      </div>
+                    </div>
+
+
+                  
+                   
+                  </div>
+
+                 
+                 <button type="submit"
+                    style="margin-right: 10px;" class="btn btn-dark">Register</button>
+                    <a href="/" class="btn btn-outline-dark">Login</a>
+                </form>
+              </div>
             </div>
-            
-            <div class="col-6">	<div class="container">
-              <h1>Free to All Students</h1>
-              <p style="font-weight: bold;">Start Selling Smart With Us</p>
-              <ul>
-                <li>&#8226; Books and educational materials</li>
-                <li>&#8226; Handmade crafts and artwork</li>
-                <li>&#8226; Unused or gently used clothing and accessories</li>
-                <li>&#8226; Electronics and gadgets</li>
-                <li>&#8226; Furniture and home decor</li>
-                <li>&#8226; Tickets to events or concerts</li>
-                <li>&#8226; Fast Food</li>
-            </ul>
-            
-           
-            </div>
-       
-            <style>
-          
-              label {
-                display: block;
-                font-size: 18px;
-                margin-bottom: 10px;
-              }
-              input {
-                display: block;
-                padding: 10px;
-                font-size: 18px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                margin-bottom: 20px;
-                width: 100%;
-              }
-            
-              .error {
-                color: red;
-                font-size: 14px;
-                margin-top: 5px;
-              }
-            </style>
+          </div>
+        </div>
+
+
+
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="row">
+          <div class="col-auto"></div>
+          <div class="col-auto"></div>
+
+        </div>
+        <div class="row">
+          <div class="col-auto"></div>
+          <div class="col-auto"></div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- botton section -->
+  <section class="bottom-section">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+    </div>
+
+  </section>
+
+
+
+
+
+
+
+  <!-- top section -->
+  <section class="Top-z-index" style="height: 200px;">
+    <div class="row">
+      <div class="col-4">
+        <div class="circle energy2">
+          <div class="icon6">
+            <i class="far fa-calendar-alt"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="Top-z-index2" style="height: 200px;">
+    <div class="row">
+      <div class="col-4">
+        <div class="circle energy">
+          <div class="icon4">
+            <i class="far fa-clock"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="Top-z-index3" style="height: 200px;">
+    <div class="row">
+      <div class="col-4">
+        <div class="circle energy">
+          <div class="icon3">
+            <i class="far fa-file-alt"></i>
+
           </div>
         </div>
       </div>
     </div>
     </div>
-           
-              <div class="container">
-            
-              
-                <form action="/register.html" method="POST">
-                <div class="form-group">
-                  <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email"  class="form-control col-6" name="username">
-                  </div>
-                  <div class="form-group">
-                    <label for="Name">Student Nuumber</label>
-                    <input type="text"  class="form-control col-6" name="StudentNumber">
-                  </div>
-              <label for="password">Create Password</label>
-              <div class="input-group col-8">
-                <input type="password" class="form-control" id="password" name="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$" required>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="password-toggle">
-                    <i class="fas fa-eye-slash"></i>
-                  </span>
-                </div>
-              </div>
-            </div> 
-            <div class="" style="font-size: 80%; color: red; margin: 0%; padding:0%;">
-              Your password must be 8-20 characters long, contain letters and numbers, special characters, and must not contain spaces, or emoji.
-            </div>
-                    <div class="form-group">
-                      <label for="password2">Confirm Password</label>
-                      <input type="password" class="form-control col-6" id="password2" required>
-                      <div class="invalid-feedback">
-                        Passwords don't match.
-                      </div>
-                    </div>
-                    <button type="submit" class="btn btn-success">Register</button>
-                  </form>
-                  
-                  <script>
-        
-                    
-                  </script>
-                  
-          
-            
-              
-              </div>
-            </form>
+  </section>
 
 
-  </div>
+  <section class="Top-z-index4" style="height: 200px;">
+    <div class="row">
+      <div class="col-4">
+        <div class="circle energy2">
+          <div class="icon2">
+            <i class="far fa-envelope"></i>
 
-      
- 
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </section>
 
- 
-    <script src="/js/script.js"></script>
+
+
+
+
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
 
 </html>
-
-
-<%- include('partials/footer') %>
